@@ -1,5 +1,7 @@
 package com.manning.application.notification.template.formatter.model;
 
+import com.manning.application.notification.common.model.NotificationMode;
+import com.manning.application.notification.common.model.TemplateName;
 import lombok.Data;
 import lombok.ToString;
 

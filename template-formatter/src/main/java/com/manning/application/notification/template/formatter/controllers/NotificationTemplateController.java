@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
-@Tag(name = "Template API", description = "Formats customer notifications using either SMS or Email templates")
+@Tag(name = "Notification Template API", description = "Formats customer notifications using either SMS or Email templates")
 @RestController
 @RequiredArgsConstructor
 public class NotificationTemplateController {

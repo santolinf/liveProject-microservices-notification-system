@@ -1,4 +1,4 @@
-package com.manning.application.notification.template.formatter.model;
+package com.manning.application.notification.common.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.Getter;

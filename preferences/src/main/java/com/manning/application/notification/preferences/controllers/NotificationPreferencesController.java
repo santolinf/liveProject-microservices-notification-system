@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
-@Tag(name = "Preferences API", description = "Manage customer notification preferences")
+@Tag(name = "Notification Preferences API", description = "Manage customer notification preferences")
 @RestController
 @RequiredArgsConstructor
 public class NotificationPreferencesController {

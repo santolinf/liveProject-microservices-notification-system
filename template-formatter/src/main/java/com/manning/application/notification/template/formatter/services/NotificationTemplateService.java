@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static com.manning.application.notification.template.formatter.model.NotificationMode.EMAIL;
+import static com.manning.application.notification.common.model.NotificationMode.EMAIL;
 
 @Slf4j
 @Service

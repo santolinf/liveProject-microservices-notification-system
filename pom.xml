@@ -10,13 +10,15 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.manning.application.notification</groupId>
-    <artifactId>notification-system</artifactId>
+    <artifactId>NotificationSystemParent</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Microservices Notification System :: Parent</name>
     <modules>
+        <module>common-domain</module>
         <module>preferences</module>
         <module>template-formatter</module>
+        <module>gateway</module>
     </modules>
     <properties>
         <jdk.version>11</jdk.version>

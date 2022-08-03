@@ -1,5 +1,6 @@
 package com.manning.application.notification.template.formatter.exceptions;
 
+import com.manning.application.notification.common.exceptions.Error;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +13,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
-import static com.manning.application.notification.template.formatter.exceptions.Error.Code.VALIDATION_ERROR;
+import static com.manning.application.notification.common.exceptions.Error.Code.VALIDATION_ERROR;
 
 @ControllerAdvice
 public class NotificationTemplateControllerAdvice extends ResponseEntityExceptionHandler {
