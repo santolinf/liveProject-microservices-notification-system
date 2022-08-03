@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>Citizen Bank</title>
+
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'/>
+
+  <!-- use the font -->
+  <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            font-size: 48px;
+        }
+    </style>
+</head>
+<body>
+<p th:text="${'Hello ' + name}"></p>
+
+<p th:text="${'Welcome to Citizen Bank'}"></p>
+</p>
+<p th:text="${'Your balance for the account number ending with '+ accountnumber+' is '+ balance+' as of ' + #dates.format(#dates.createNow(), 'dd MMM yyyy HH:mm')}"></p>
+<p>
+  You can login to internet banking channel to view more details on the account</p>
+<p>
+  Regards, <br />
+<p th:text="${'Citizen Bank'}"></p>
+<p th:text="${'United States'}"></p>
+</p>
+</body>
+</html>
