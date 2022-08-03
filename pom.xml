@@ -16,6 +16,7 @@
     <name>Microservices Notification System :: Parent</name>
     <modules>
         <module>preferences</module>
+        <module>template-formatter</module>
     </modules>
     <properties>
         <jdk.version>11</jdk.version>

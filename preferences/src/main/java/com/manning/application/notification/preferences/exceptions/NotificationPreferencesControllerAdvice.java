@@ -30,7 +30,7 @@ public class NotificationPreferencesControllerAdvice extends ResponseEntityExcep
 
     @Override
     protected ResponseEntity<Object> handleBindException(BindException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        var message = ex.getFieldErrors().stream().map(e -> e.getField() + ": " + e.getDefaultMessage()).collect(Collectors.joining(";"));
+        var message = ex.getFieldErrors().stream().map(e -> e.getField() + ": " + e.getDefaultMessage()).collect(Collectors.joining("; "));
         var error = Error.builder()
                 .code(VALIDATION_ERROR)
                 .message(message)
