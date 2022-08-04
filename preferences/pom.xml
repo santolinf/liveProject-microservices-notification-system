@@ -4,14 +4,16 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.manning.application.notification</groupId>
-        <artifactId>notification-system</artifactId>
+        <artifactId>NotificationSystemParent</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <artifactId>NotificationPreferencesService</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
 	<name>Microservices Notification System :: Preferences</name>
     <description>Project for managing Notification Preferences</description>
     <properties>
         <java.version>11</java.version>
+        <notification-common-domain.version>0.0.1-SNAPSHOT</notification-common-domain.version>
         <springdoc-openapi.version>1.6.9</springdoc-openapi.version>
         <mapstruct.version>1.5.1.Final</mapstruct.version>
     </properties>
@@ -27,6 +29,13 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+
+        <!-- Common Domain types -->
+        <dependency>
+            <groupId>com.manning.application.notification</groupId>
+            <artifactId>CommonDomain</artifactId>
+            <version>${notification-common-domain.version}</version>
         </dependency>
 
         <!-- Open API -->

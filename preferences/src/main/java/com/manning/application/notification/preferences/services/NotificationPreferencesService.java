@@ -1,7 +1,7 @@
 package com.manning.application.notification.preferences.services;
 
+import com.manning.application.notification.common.exceptions.NotificationNotFoundException;
 import com.manning.application.notification.preferences.entities.NotificationPreferences;
-import com.manning.application.notification.preferences.exceptions.NotificationPreferencesNotFoundException;
 import com.manning.application.notification.preferences.formatters.NotificationPreferencesMapper;
 import com.manning.application.notification.preferences.model.NotificationPreferencesRequest;
 import com.manning.application.notification.preferences.model.NotificationPreferencesResponse;
@@ -20,7 +20,7 @@ public class NotificationPreferencesService {
     public NotificationPreferencesResponse findNotificationPreferences(NotificationPreferencesRequest request) {
         NotificationPreferences notificationPreferences =
                 repository.findByCustomerId(request.getCustomerId())
-                        .orElseThrow(() -> new NotificationPreferencesNotFoundException(
+                        .orElseThrow(() -> new NotificationNotFoundException(
                                 "Notification preferences not found for customer id: " + request.getCustomerId()
                         )
                 );

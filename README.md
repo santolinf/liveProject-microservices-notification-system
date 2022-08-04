@@ -19,3 +19,8 @@ For UI -- http://localhost:8181/swagger-ui/index.html
 For JSON -- http://localhost:8282/v3/api-docs/
 
 For UI -- http://localhost:8282/swagger-ui/index.html
+
+### Notification Gateway
+For JSON -- http://localhost:8383/v3/api-docs/
+
+For UI -- http://localhost:8383/swagger-ui/index.html

@@ -1,4 +1,4 @@
-package com.manning.application.notification.preferences.exceptions;
+package com.manning.application.notification.common.exceptions;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
@@ -9,11 +9,13 @@ import java.time.LocalDateTime;
 @Builder
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Error {
+public class ErrorResponse {
 
-    enum Code {
+    public enum Code {
         NOT_FOUND,
-        VALIDATION_ERROR
+        VALIDATION_ERROR,
+        UNSUPPORTED_OPERATION,
+        SERVICE_ERROR
     }
 
     private Code code;

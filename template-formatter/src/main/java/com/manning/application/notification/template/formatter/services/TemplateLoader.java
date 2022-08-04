@@ -1,6 +1,6 @@
 package com.manning.application.notification.template.formatter.services;
 
-import com.manning.application.notification.template.formatter.model.TemplateName;
+import com.manning.application.notification.common.model.TemplateName;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
@@ -13,7 +13,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UncheckedIOException;
 
-import static com.manning.application.notification.template.formatter.model.TemplateName.PhoneNumberChanged;
+import static com.manning.application.notification.common.model.TemplateName.PhoneNumberChanged;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 @Slf4j

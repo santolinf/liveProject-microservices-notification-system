@@ -7,15 +7,14 @@
         <artifactId>NotificationSystemParent</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
-    <artifactId>NotificationTemplateFormatter</artifactId>
+    <artifactId>NotificationGateway</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-	<name>Microservices Notification System :: Template Formatter</name>
-    <description>Project for managing SMS and Email templates</description>
+	<name>Microservices Notification System :: Gateway</name>
+    <description>Project for accepting notification requests from consuming applications and forwarding them to SMS or Email provider gateways</description>
     <properties>
         <java.version>11</java.version>
         <notification-common-domain.version>0.0.1-SNAPSHOT</notification-common-domain.version>
         <springdoc-openapi.version>1.6.9</springdoc-openapi.version>
-        <commons-text.version>1.9</commons-text.version>
         <guava.version>31.1-jre</guava.version>
     </properties>
     <dependencies>
@@ -25,15 +24,11 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-thymeleaf</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-cache</artifactId>
+            <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
 
         <!-- Common Domain types -->
@@ -48,19 +43,6 @@
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-ui</artifactId>
             <version>${springdoc-openapi.version}</version>
-        </dependency>
-
-        <!-- Commons text -->
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-text</artifactId>
-            <version>${commons-text.version}</version>
-        </dependency>
-
-        <!-- Cache provider -->
-        <dependency>
-            <groupId>com.github.ben-manes.caffeine</groupId>
-            <artifactId>caffeine</artifactId>
         </dependency>
 
         <dependency>
@@ -93,6 +75,11 @@
                     <source>${java.version}</source>
                     <target>${java.version}</target>
                     <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.springframework.boot</groupId>
+                            <artifactId>spring-boot-configuration-processor</artifactId>
+                            <version>${spring-boot.version}</version>
+                        </path>
                         <path>
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
