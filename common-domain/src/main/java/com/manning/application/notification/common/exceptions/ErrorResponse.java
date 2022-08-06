@@ -15,7 +15,8 @@ public class ErrorResponse {
         NOT_FOUND,
         VALIDATION_ERROR,
         UNSUPPORTED_OPERATION,
-        SERVICE_ERROR
+        SERVICE_ERROR,
+        NOTIFICATION_ERROR
     }
 
     private Code code;

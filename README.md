@@ -10,6 +10,11 @@ JDBC URL -- jdbc:h2:mem:notificationsdb
 
 ## OpenAPI
 
+### Notification Application
+For JSON -- http://localhost:8080/v3/api-docs/
+
+For UI -- http://localhost:8080/swagger-ui/index.html
+
 ### Notification Preferences
 For JSON -- http://localhost:8181/v3/api-docs/
 

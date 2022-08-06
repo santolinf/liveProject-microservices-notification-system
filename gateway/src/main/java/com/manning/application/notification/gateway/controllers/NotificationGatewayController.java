@@ -1,7 +1,7 @@
 package com.manning.application.notification.gateway.controllers;
 
-import com.manning.application.notification.gateway.model.NotificationGatewayRequest;
-import com.manning.application.notification.gateway.model.NotificationGatewayResponse;
+import com.manning.application.notification.common.model.NotificationGatewayRequest;
+import com.manning.application.notification.common.model.NotificationGatewayResponse;
 import com.manning.application.notification.gateway.services.NotificationGatewayService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

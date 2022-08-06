@@ -1,7 +1,7 @@
 package com.manning.application.notification.template.formatter.controllers;
 
-import com.manning.application.notification.template.formatter.model.NotificationTemplateRequest;
-import com.manning.application.notification.template.formatter.model.NotificationTemplateResponse;
+import com.manning.application.notification.common.model.NotificationTemplateRequest;
+import com.manning.application.notification.common.model.NotificationTemplateResponse;
 import com.manning.application.notification.template.formatter.services.NotificationTemplateService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

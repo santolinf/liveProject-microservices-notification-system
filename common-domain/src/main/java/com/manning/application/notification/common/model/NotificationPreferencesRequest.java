@@ -1,4 +1,4 @@
-package com.manning.application.notification.preferences.model;
+package com.manning.application.notification.common.model;
 
 import lombok.Data;
 import lombok.ToString;

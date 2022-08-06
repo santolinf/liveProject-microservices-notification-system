@@ -19,6 +19,7 @@
         <module>preferences</module>
         <module>template-formatter</module>
         <module>gateway</module>
+        <module>application</module>
     </modules>
     <properties>
         <jdk.version>11</jdk.version>

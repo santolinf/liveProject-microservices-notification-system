@@ -1,6 +1,6 @@
-package com.manning.application.notification.template.formatter.model;
+package com.manning.application.notification.model;
 
-import com.manning.application.notification.common.model.NotificationMode;
+import com.manning.application.notification.common.model.NotificationParameter;
 import com.manning.application.notification.common.model.TemplateName;
 import lombok.Data;
 import lombok.ToString;
@@ -11,12 +11,14 @@ import java.util.List;
 
 @Data
 @ToString
-public class NotificationTemplateRequest {
+public class NotificationRequest {
+
+    @NotNull
+    private String customerId;
 
     @NotEmpty
     private List<NotificationParameter> notificationParameters;
+
     @NotNull
     private TemplateName notificationTemplateName;
-    @NotNull
-    private NotificationMode notificationMode;
 }

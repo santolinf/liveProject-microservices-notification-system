@@ -1,8 +1,8 @@
 package com.manning.application.notification.gateway.services;
 
 import com.manning.application.notification.gateway.config.StubNotificationSendersConfig;
-import com.manning.application.notification.gateway.model.NotificationGatewayRequest;
-import com.manning.application.notification.gateway.model.NotificationGatewayResponse;
+import com.manning.application.notification.common.model.NotificationGatewayRequest;
+import com.manning.application.notification.common.model.NotificationGatewayResponse;
 import com.manning.application.notification.gateway.services.mail.StubMailSender;
 import com.manning.application.notification.gateway.services.sms.StubSmsSender;
 import lombok.RequiredArgsConstructor;
