@@ -29,3 +29,13 @@ For UI -- http://localhost:8282/swagger-ui/index.html
 For JSON -- http://localhost:8383/v3/api-docs/
 
 For UI -- http://localhost:8383/swagger-ui/index.html
+
+## Consul
+
+Start agent
+```shell
+consul agent -server -bootstrap-expect=1 -data-dir=consul-data -ui -bind=127.0.0.1
+```
+
+Open web browser at http://localhost:8500/ui
+

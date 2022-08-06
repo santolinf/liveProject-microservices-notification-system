@@ -3,11 +3,9 @@ package com.manning.application.notification.formatters;
 import com.manning.application.notification.common.exceptions.NotificationServiceApiException;
 import feign.Response;
 import feign.codec.ErrorDecoder;
-import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
 
-@Slf4j
 public class ClientsErrorDecoder implements ErrorDecoder {
 
     @Override
