@@ -1,7 +1,7 @@
 package com.manning.application.notification.preferences.formatters;
 
 import com.manning.application.notification.preferences.entities.NotificationPreferences;
-import com.manning.application.notification.preferences.model.NotificationPreferencesResponse;
+import com.manning.application.notification.common.model.NotificationPreferencesResponse;
 import org.mapstruct.*;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring")

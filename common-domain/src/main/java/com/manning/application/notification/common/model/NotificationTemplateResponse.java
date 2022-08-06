@@ -1,4 +1,4 @@
-package com.manning.application.notification.template.formatter.model;
+package com.manning.application.notification.common.model;
 
 import lombok.Builder;
 import lombok.Data;

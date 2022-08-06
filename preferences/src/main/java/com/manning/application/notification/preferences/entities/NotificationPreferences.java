@@ -9,11 +9,11 @@ import javax.persistence.*;
 @ToString
 @RequiredArgsConstructor
 @Entity
-@Table(name = "notification_preferences")
+@Table(name = "PREFERENCES")
 public class NotificationPreferences {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
     private String customerId;

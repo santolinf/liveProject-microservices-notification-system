@@ -59,6 +59,17 @@ public class NotificationControllersAdvice extends ResponseEntityExceptionHandle
         return new ResponseEntity<>(error, new HttpHeaders(), HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(NotificationServiceApiException.class)
+    public ResponseEntity<ErrorResponse> handleNotificationServiceApiException(NotificationServiceApiException ex) {
+        var error = ErrorResponse.builder()
+                .code(NOTIFICATION_ERROR)
+                .message(ex.getResponseBody())
+                .data(ex.getRequestUrl())
+                .timestamp(LocalDateTime.now())
+                .build();
+        return new ResponseEntity<>(error, new HttpHeaders(), HttpStatus.resolve(ex.getResponseStatus()));
+    }
+
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
             MethodArgumentNotValidException ex,
@@ -97,6 +108,16 @@ public class NotificationControllersAdvice extends ResponseEntityExceptionHandle
                 .timestamp(LocalDateTime.now())
                 .build();
         return new ResponseEntity<>(error, headers, status);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponse> handleGenericException(Exception ex) {
+        var error = ErrorResponse.builder()
+                .code(SERVICE_ERROR)
+                .message(ex.getMessage())
+                .timestamp(LocalDateTime.now())
+                .build();
+        return new ResponseEntity<>(error, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @Override

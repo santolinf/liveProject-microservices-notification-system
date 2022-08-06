@@ -1,6 +1,5 @@
-package com.manning.application.notification.gateway.model;
+package com.manning.application.notification.common.model;
 
-import com.manning.application.notification.common.model.NotificationMode;
 import lombok.Data;
 import lombok.ToString;
 

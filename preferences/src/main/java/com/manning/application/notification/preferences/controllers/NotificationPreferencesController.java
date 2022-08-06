@@ -1,7 +1,7 @@
 package com.manning.application.notification.preferences.controllers;
 
-import com.manning.application.notification.preferences.model.NotificationPreferencesRequest;
-import com.manning.application.notification.preferences.model.NotificationPreferencesResponse;
+import com.manning.application.notification.common.model.NotificationPreferencesRequest;
+import com.manning.application.notification.common.model.NotificationPreferencesResponse;
 import com.manning.application.notification.preferences.services.NotificationPreferencesService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

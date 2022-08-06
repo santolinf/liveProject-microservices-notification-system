@@ -1,8 +1,8 @@
 package com.manning.application.notification.template.formatter.services;
 
-import com.manning.application.notification.template.formatter.model.NotificationParameter;
-import com.manning.application.notification.template.formatter.model.NotificationTemplateRequest;
-import com.manning.application.notification.template.formatter.model.NotificationTemplateResponse;
+import com.manning.application.notification.common.model.NotificationParameter;
+import com.manning.application.notification.common.model.NotificationTemplateRequest;
+import com.manning.application.notification.common.model.NotificationTemplateResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.text.StringSubstitutor;
