@@ -5,10 +5,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@FeignClient(
-        name = "preferencesClient",
-        url = "${com.manning.application.service.preferences.url}"
-)
+@FeignClient(name = "${com.manning.application.service.preferences.id}")
 public interface PreferencesClient {
 
     @GetMapping("/notification/preferences")
