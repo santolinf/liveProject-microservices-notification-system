@@ -1,0 +1,135 @@
+{
+	"info": {
+		"_postman_id": "30336a86-db2d-41c2-a2ed-7cd3a435780f",
+		"name": "Manning - Notification System",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Notification Preferences",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8181/notification/preferences?customerId=123",
+					"host": [
+						"localhost"
+					],
+					"port": "8181",
+					"path": [
+						"notification",
+						"preferences"
+					],
+					"query": [
+						{
+							"key": "customerId",
+							"value": "123"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Notification Template",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"notificationParameters\": [\r\n        {\r\n            \"notificationParameterName\": \"name\",\r\n            \"notificationParameterValue\": \"Vamshi\"\r\n        },\r\n        {\r\n            \"notificationParameterName\": \"oldPhoneNumber\",\r\n            \"notificationParameterValue\": \"12345\"\r\n        },\r\n        {\r\n            \"notificationParameterName\": \"newPhoneNumber\",\r\n            \"notificationParameterValue\": \"09828723\"\r\n        }\r\n    ],\r\n    \"notificationTemplateName\": \"PhoneNumberChanged\",\r\n    \"notificationMode\": \"EMAIL\"\r\n}"
+				},
+				"url": {
+					"raw": "localhost:8282/api/notifications/templates",
+					"host": [
+						"localhost"
+					],
+					"port": "8282",
+					"path": [
+						"api",
+						"notifications",
+						"templates"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Notification Send (gateway)",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"customerId\": \"123\",\r\n    \"notificationMode\": \"SMS\",\r\n    \"notificationContent\": \"<!DOCTYPE html PUBLIC \\\"-//W3C//DTD XHTML 1.0 Transitional//EN\\\" \\\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\\\">\\r\\n<html xmlns=\\\"http://www.w3.org/1999/xhtml\\\">\\r\\n<head>\\r\\n  <title>Citizen Bank</title>\\r\\n\\r\\n  <meta http-equiv=\\\"Content-Type\\\" content=\\\"text/html; charset=UTF-8\\\" />\\r\\n  <meta name=\\\"viewport\\\" content=\\\"width=device-width, initial-scale=1.0\\\"/>\\r\\n\\r\\n  <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'/>\\r\\n\\r\\n  <!-- use the font -->\\r\\n  <style>\\r\\n        body {\\r\\n            font-family: 'Roboto', sans-serif;\\r\\n            font-size: 48px;\\r\\n        }\\r\\n    </style>\\r\\n</head>\\r\\n<body>\\r\\n<p>Hello Vamshi</p>\\r\\n\\r\\n<p>Welcome to Citizen Bank</p>\\r\\n</p>\\r\\n<p>Your Phone number is changed from 12345 to 09828723 as of 04 Aug 2022 09:45</p>\\r\\n<p>\\r\\n  You can login to internet banking channel to view more details on the account</p>\\r\\n<p>\\r\\n  Regards, <br />\\r\\n<p>Citizen Bank</p>\\r\\n<p>United States</p>\\r\\n</p>\\r\\n</body>\\r\\n</html>\\r\\n\",\r\n    \"emailAddress\": \"vamshi.kesetty@gmail.com\",\r\n    \"emailSubject\": \"PhoneNumberChanged\",\r\n    \"phoneNumber\": \"+6588232374\"\r\n}"
+				},
+				"url": {
+					"raw": "localhost:8383/api/notifications/send",
+					"host": [
+						"localhost"
+					],
+					"port": "8383",
+					"path": [
+						"api",
+						"notifications",
+						"send"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Notification (application)",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"customerId\": \"456\",\r\n    \"notificationParameters\": [\r\n        {\r\n            \"notificationParameterName\": \"name\",\r\n            \"notificationParameterValue\": \"Vamshi\"\r\n        },\r\n        {\r\n            \"notificationParameterName\": \"oldPhoneNumber\",\r\n            \"notificationParameterValue\": \"12345\"\r\n        },\r\n        {\r\n            \"notificationParameterName\": \"newPhoneNumber\",\r\n            \"notificationParameterValue\": \"09828723\"\r\n        }\r\n    ],\r\n    \"notificationTemplateName\": \"PhoneNumberChanged\"\r\n}"
+				},
+				"url": {
+					"raw": "localhost:8080/api/notifications",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"notifications"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
