@@ -9,6 +9,7 @@ import com.manning.application.notification.integration.TemplateFormatterClient;
 import com.manning.application.notification.model.NotificationRequest;
 import com.manning.application.notification.model.NotificationResponse;
 import com.manning.application.notification.repositories.NotificationRepository;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +32,18 @@ public class NotificationService {
 
     private final NotificationGatewayClient notificationGatewayClient;
 
+    /**
+     * The rationale for placing a circuit breaker here rather than on each individual clients {@link PreferencesClient},
+     * {@link TemplateFormatterClient} and {@link NotificationGatewayClient}, is simply that all the clients are required for
+     * sending a notification. For example, a notification cannot be sent without it being formatted with a template, and
+     * the notification must be sent by a provider via a gateway.
+     * When the failure rate threshold is reached and the circuit id <em>OPEN</em> we fallback to returning a warning
+     * message that the notification has not been sent.
+     * As a fallback, we could try a different service, save the notification for processing later however we could not return a cached
+     * response as notifications are generally unique.
+     */
     @Transactional
+    @CircuitBreaker(name = "sendNotification", fallbackMethod = "sendNotificationFallback")
     public NotificationResponse sendNotification(NotificationRequest request) {
         Notification notification = mapper.notificationRequestToNotification(request);
         notification = repository.save(notification);
@@ -55,11 +67,11 @@ public class NotificationService {
                 templateResponse
         );
 
-        NotificationResponse response = new NotificationResponse();
-        response.setStatus(gatewayResponse.getStatus());
-        response.setStatusDescription(gatewayResponse.getStatusDescription());
-        response.setNotificationReferenceId(notification.getId());
-        return response;
+        return NotificationResponse.builder()
+                .status(gatewayResponse.getStatus())
+                .statusDescription(gatewayResponse.getStatusDescription())
+                .notificationReferenceId(notification.getId())
+                .build();
     }
 
     private NotificationGatewayResponse sendNotification(
@@ -98,5 +110,13 @@ public class NotificationService {
 
     private NotificationPreferencesResponse getPreferences(String customerId) {
         return preferencesClient.getPreferences(customerId);
+    }
+
+    NotificationResponse sendNotificationFallback(NotificationRequest request, RuntimeException ex) {
+        return NotificationResponse.builder()
+                .status("WARNING")
+                .statusDescription("Notification not sent. Underlying cause: [" + ex.getMessage() + "]")
+                .notificationReferenceId(-1)
+                .build();
     }
 }
