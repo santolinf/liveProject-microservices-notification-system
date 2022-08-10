@@ -130,6 +130,38 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Notifications (API Gateway)",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"customerId\": \"123\",\r\n    \"notificationParameters\": [\r\n        {\r\n            \"notificationParameterName\": \"name\",\r\n            \"notificationParameterValue\": \"Vamshi\"\r\n        },\r\n        {\r\n            \"notificationParameterName\": \"oldPhoneNumber\",\r\n            \"notificationParameterValue\": \"12345\"\r\n        },\r\n        {\r\n            \"notificationParameterName\": \"newPhoneNumber\",\r\n            \"notificationParameterValue\": \"09828723\"\r\n        }\r\n    ],\r\n    \"notificationTemplateName\": \"PhoneNumberChanged\"\r\n}"
+				},
+				"url": {
+					"raw": "localhost:8585/api/notifications",
+					"host": [
+						"localhost"
+					],
+					"port": "8585",
+					"path": [
+						"api",
+						"notifications"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
