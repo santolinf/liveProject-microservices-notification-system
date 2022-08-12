@@ -20,6 +20,7 @@ import java.util.stream.Stream;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static com.manning.application.notification.common.model.NotificationMode.EMAIL;
+import static com.manning.application.notification.common.model.RemoteResponseStatus.SUCCESS;
 
 @Slf4j
 @Service
@@ -42,7 +43,6 @@ public class NotificationGatewayService {
     }
 
     public NotificationGatewayResponse sendNotification(NotificationGatewayRequest request) {
-        NotificationGatewayResponse.NotificationGatewayResponseBuilder response;
         if (EMAIL.equals(request.getNotificationMode())) {
             sendEmailNotification(request);
         } else {
@@ -50,7 +50,7 @@ public class NotificationGatewayService {
         }
 
         return NotificationGatewayResponse.builder()
-                .status("SUCCESS")
+                .status(SUCCESS)
                 .statusDescription("Notification Received Successfully")
                 .build();
     }

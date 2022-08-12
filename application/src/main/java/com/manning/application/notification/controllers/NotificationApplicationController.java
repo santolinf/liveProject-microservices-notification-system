@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
+import java.util.concurrent.CompletableFuture;
+
 @Tag(name = "Notification Application", description = "Accepts consuming channel application requests")
 @RestController
 @RequiredArgsConstructor
@@ -22,7 +24,7 @@ public class NotificationApplicationController {
 
     @Operation(summary = "Accept notification requests")
     @PostMapping(path = "/api/notifications", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public NotificationResponse acceptNotification(@Valid @RequestBody NotificationRequest request) {
+    public CompletableFuture<NotificationResponse> acceptNotification(@Valid @RequestBody NotificationRequest request) {
         return service.sendNotification(request);
     }
 }

@@ -9,14 +9,19 @@ import com.manning.application.notification.integration.TemplateFormatterClient;
 import com.manning.application.notification.model.NotificationRequest;
 import com.manning.application.notification.model.NotificationResponse;
 import com.manning.application.notification.repositories.NotificationRepository;
-import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.bulkhead.annotation.Bulkhead;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 
+import java.util.concurrent.CompletableFuture;
+
 import static com.manning.application.notification.common.model.NotificationMode.EMAIL;
 import static com.manning.application.notification.common.model.NotificationMode.SMS;
+import static com.manning.application.notification.common.model.RemoteResponseStatus.SUCCESS;
+import static com.manning.application.notification.common.model.RemoteResponseStatus.WARNING;
+import static io.github.resilience4j.bulkhead.annotation.Bulkhead.Type.THREADPOOL;
 
 @Service
 @RequiredArgsConstructor
@@ -33,22 +38,24 @@ public class NotificationService {
     private final NotificationGatewayClient notificationGatewayClient;
 
     /**
-     * The rationale for placing a circuit breaker here rather than on each individual clients {@link PreferencesClient},
-     * {@link TemplateFormatterClient} and {@link NotificationGatewayClient}, is simply that all the clients are required for
-     * sending a notification. For example, a notification cannot be sent without it being formatted with a template, and
-     * the notification must be sent by a provider via a gateway.
-     * When the failure rate threshold is reached and the circuit id <em>OPEN</em> we fallback to returning a warning
-     * message that the notification has not been sent.
-     * As a fallback, we could try a different service, save the notification for processing later however we could not return a cached
-     * response as notifications are generally unique.
+     * With <em>SEMAPHORE</em> based Bulkheads we can only control the number of concurrent requests and wait times,
+     * and requests execute using the current threads of the incoming requests.
+     * <code>maxWaitDuration</code> and <code>maxConcurrentCalls</code> belong to the Semaphore-based Bulkhead.
+     * <br/><br/>
+     * <em>THREADPOOL</em> based Bulkheads execute in separate threads and are limited by the thread pool capacity.
+     * <code>maxThreadPoolSize</code>, <code>coreThreadPoolSize</code> and <code>queueCapacity</code> belong to the
+     * Threadpool-based Bulkhead.
      */
+    @Bulkhead(name = "sendNotification", type = THREADPOOL, fallbackMethod = "concurrentSendNotificationFallback")
     @Transactional
-    @CircuitBreaker(name = "sendNotification", fallbackMethod = "sendNotificationFallback")
-    public NotificationResponse sendNotification(NotificationRequest request) {
+    public CompletableFuture<NotificationResponse> sendNotification(NotificationRequest request) {
         Notification notification = mapper.notificationRequestToNotification(request);
         notification = repository.save(notification);
 
         NotificationPreferencesResponse preferencesResponse = getPreferences(request.getCustomerId());
+        if (!SUCCESS.equals(preferencesResponse.getStatus())) {
+            return toWarningNotificationResponse(preferencesResponse.getStatusDescription());
+        }
 
         NotificationMode notificationMode;
         if (preferencesResponse.isEmailPreferenceFlag()) {
@@ -59,6 +66,9 @@ public class NotificationService {
         notification.setNotificationMode(notificationMode);
 
         NotificationTemplateResponse templateResponse = formatNotification(request, notificationMode);
+        if (!SUCCESS.equals(templateResponse.getStatus())) {
+            return toWarningNotificationResponse(templateResponse.getStatusDescription());
+        }
 
         NotificationGatewayResponse gatewayResponse = sendNotification(
                 request.getCustomerId(),
@@ -66,12 +76,23 @@ public class NotificationService {
                 notificationMode,
                 templateResponse
         );
+        if (!SUCCESS.equals(gatewayResponse.getStatus())) {
+            return toWarningNotificationResponse(gatewayResponse.getStatusDescription());
+        }
 
-        return NotificationResponse.builder()
+        return CompletableFuture.completedFuture(NotificationResponse.builder()
                 .status(gatewayResponse.getStatus())
                 .statusDescription(gatewayResponse.getStatusDescription())
                 .notificationReferenceId(notification.getId())
-                .build();
+                .build());
+    }
+
+    private CompletableFuture<NotificationResponse> toWarningNotificationResponse(String statusDescription) {
+        return CompletableFuture.completedFuture(NotificationResponse.builder()
+                .status(WARNING)
+                .statusDescription(statusDescription)
+                .notificationReferenceId(-1)
+                .build());
     }
 
     private NotificationGatewayResponse sendNotification(
@@ -112,11 +133,11 @@ public class NotificationService {
         return preferencesClient.getPreferences(customerId);
     }
 
-    NotificationResponse sendNotificationFallback(NotificationRequest request, RuntimeException ex) {
-        return NotificationResponse.builder()
-                .status("WARNING")
-                .statusDescription("Notification not sent. Underlying cause: [" + ex.getMessage() + "]")
-                .notificationReferenceId(-1)
-                .build();
+    CompletableFuture<NotificationResponse> concurrentSendNotificationFallback(NotificationRequest request, Throwable ex) {
+        return CompletableFuture.completedFuture(NotificationResponse.builder()
+                .status(WARNING)
+                .statusDescription("Notification not sent. Underlying cause: [" + Thread.currentThread().getId() + "/" + Thread.currentThread().getName() + "; " + ex.getMessage() + "]")
+                .notificationReferenceId(-2)
+                .build());
     }
 }

@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.manning.application.notification.common.model.NotificationMode.EMAIL;
+import static com.manning.application.notification.common.model.RemoteResponseStatus.SUCCESS;
 
 @Slf4j
 @Service
@@ -41,7 +42,7 @@ public class NotificationTemplateService {
             response = formatSmsNotification(request);
         }
 
-        return response.status("SUCCESS")
+        return response.status(SUCCESS)
                 .statusDescription("Successfully merged the template with the template parameters")
                 .build();
     }
