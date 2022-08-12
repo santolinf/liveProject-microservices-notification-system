@@ -1,26 +1,27 @@
-package com.manning.application.notification.common.exceptions;
+package com.manning.application.notification.controllers;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
+import com.manning.application.notification.common.exceptions.ErrorResponse;
+import com.manning.application.notification.common.exceptions.NotificationNotFoundException;
+import com.manning.application.notification.common.exceptions.NotificationServiceApiException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.validation.BindException;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import org.springframework.web.bind.support.WebExchangeBindException;
 
 import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
 import static com.manning.application.notification.common.exceptions.ErrorResponse.Code.*;
-import static org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication.Type.SERVLET;
 
+/**
+ * We can use <code>@ExceptionHandler</code> annotated methods to handle errors that happen within the execution
+ * of a WebFlux handler (e.g., controller method).
+ * Unlike MVC we cannot handle errors happening during the mapping phase.
+ */
 @ControllerAdvice
-@ConditionalOnWebApplication(type = SERVLET)
-public class NotificationControllersAdvice extends ResponseEntityExceptionHandler {
+public class ReactiveNotificationControllersAdvice {
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ErrorResponse> handleIllegalArgumentException(IllegalArgumentException ex) {
@@ -40,6 +41,17 @@ public class NotificationControllersAdvice extends ResponseEntityExceptionHandle
                 .timestamp(LocalDateTime.now())
                 .build();
         return new ResponseEntity<>(error, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorResponse> handleBindException(WebExchangeBindException ex) {
+        var message = ex.getFieldErrors().stream().map(e -> e.getField() + ": " + e.getDefaultMessage()).collect(Collectors.joining("; "));
+        var error = ErrorResponse.builder()
+                .code(VALIDATION_ERROR)
+                .message(message)
+                .timestamp(LocalDateTime.now())
+                .build();
+        return new ResponseEntity<>(error, new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(UnsupportedOperationException.class)
@@ -73,46 +85,6 @@ public class NotificationControllersAdvice extends ResponseEntityExceptionHandle
         return new ResponseEntity<>(error, new HttpHeaders(), HttpStatus.resolve(ex.getResponseStatus()));
     }
 
-    @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(
-            MethodArgumentNotValidException ex,
-            HttpHeaders headers,
-            HttpStatus status,
-            WebRequest request
-    ) {
-        return handleBindException(ex, headers, status, request);
-    }
-
-    @Override
-    protected ResponseEntity<Object> handleHttpMessageNotReadable(
-            HttpMessageNotReadableException ex,
-            HttpHeaders headers,
-            HttpStatus status,
-            WebRequest request
-    ) {
-        var message = ex.getMostSpecificCause().getMessage();
-        if (message.contains("request body is missing")) {
-            message = "Required request body is missing";
-        }
-        var error = ErrorResponse.builder()
-                .code(VALIDATION_ERROR)
-                .message(message)
-                .timestamp(LocalDateTime.now())
-                .build();
-        return new ResponseEntity<>(error, headers, status);
-    }
-
-    @Override
-    protected ResponseEntity<Object> handleBindException(BindException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        var message = ex.getFieldErrors().stream().map(e -> e.getField() + ": " + e.getDefaultMessage()).collect(Collectors.joining("; "));
-        var error = ErrorResponse.builder()
-                .code(VALIDATION_ERROR)
-                .message(message)
-                .timestamp(LocalDateTime.now())
-                .build();
-        return new ResponseEntity<>(error, headers, status);
-    }
-
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGenericException(Exception ex) {
         var error = ErrorResponse.builder()
@@ -121,25 +93,5 @@ public class NotificationControllersAdvice extends ResponseEntityExceptionHandle
                 .timestamp(LocalDateTime.now())
                 .build();
         return new ResponseEntity<>(error, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-
-    @Override
-    protected ResponseEntity<Object> handleExceptionInternal(
-            Exception ex,
-            Object body,
-            HttpHeaders headers,
-            HttpStatus status,
-            WebRequest request
-    ) {
-        logger.info(ex.getMessage(), ex);
-        if (HttpStatus.INTERNAL_SERVER_ERROR.equals(status)) {
-            request.setAttribute("javax.servlet.error.exception", ex, 0);
-        }
-        ErrorResponse errorResponse = ErrorResponse.builder()
-                .code(SERVICE_ERROR)
-                .message(ex.getMessage())
-                .timestamp(LocalDateTime.now())
-                .build();
-        return new ResponseEntity<>(errorResponse, headers, status);
     }
 }

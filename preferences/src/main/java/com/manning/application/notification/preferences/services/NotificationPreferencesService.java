@@ -9,6 +9,8 @@ import com.manning.application.notification.preferences.repositories.Notificatio
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import static com.manning.application.notification.common.model.RemoteResponseStatus.SUCCESS;
+
 @Service
 @RequiredArgsConstructor
 public class NotificationPreferencesService {
@@ -27,7 +29,7 @@ public class NotificationPreferencesService {
 
         NotificationPreferencesResponse response =
                 mapper.notificationPreferencesToNotificationPreferencesResponse(notificationPreferences);
-        response.setStatus("SUCCESS");
+        response.setStatus(SUCCESS);
         response.setStatusDescription("Notification Received Successfully");
         return response;
     }

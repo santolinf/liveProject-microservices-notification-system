@@ -1,15 +1,17 @@
 package com.manning.application.notification.common.model;
 
-import lombok.Data;
-import lombok.ToString;
+import lombok.*;
 
 import java.io.Serializable;
 
+@Builder
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @ToString
 public class NotificationPreferencesResponse implements Serializable {
 
-    private String status;
+    private RemoteResponseStatus status;
     private String statusDescription;
     private boolean smsPreferenceFlag;
     private boolean emailPreferenceFlag;
