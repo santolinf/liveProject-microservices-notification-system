@@ -3,6 +3,7 @@ package com.manning.application.notification.integration;
 import com.manning.application.notification.common.model.NotificationGatewayRequest;
 import com.manning.application.notification.common.model.NotificationGatewayResponse;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import io.github.resilience4j.retry.annotation.Retry;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,6 +30,7 @@ import static com.manning.application.notification.common.model.RemoteResponseSt
 @FeignClient(name = "${com.manning.application.service.gateway.id}")
 @CircuitBreaker(name = "gateway", fallbackMethod = "gatewayFallback")
 @Retry(name = "gateway")
+@RateLimiter(name = "gateway", fallbackMethod = "gatewayRateFallback")
 public interface NotificationGatewayClient {
 
     @PostMapping("/api/notifications/send")
@@ -39,6 +41,17 @@ public interface NotificationGatewayClient {
                 .status(WARNING)
                 .statusDescription(
                         "Notification not sent. Underlying cause: "
+                                + "[" + Thread.currentThread().getName() + "] "
+                                + ex.getMessage()
+                )
+                .build();
+    }
+
+    default NotificationGatewayResponse preferencesRateFallback(NotificationGatewayRequest request, Throwable ex) {
+        return NotificationGatewayResponse.builder()
+                .status(WARNING)
+                .statusDescription(
+                        "Notification not sent. Rate limiter applied: "
                                 + "[" + Thread.currentThread().getName() + "] "
                                 + ex.getMessage()
                 )

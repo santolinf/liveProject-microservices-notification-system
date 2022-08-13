@@ -2,6 +2,7 @@ package com.manning.application.notification.integration;
 
 import com.manning.application.notification.common.model.NotificationPreferencesResponse;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import io.github.resilience4j.retry.annotation.Retry;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,6 +29,7 @@ import static com.manning.application.notification.common.model.RemoteResponseSt
 @FeignClient(name = "${com.manning.application.service.preferences.id}")
 @CircuitBreaker(name = "preferences", fallbackMethod = "preferencesFallback")
 @Retry(name = "preferences")
+@RateLimiter(name = "preferences", fallbackMethod = "preferencesRateFallback")
 public interface PreferencesClient {
 
     @GetMapping("/notification/preferences")
@@ -38,6 +40,17 @@ public interface PreferencesClient {
                 .status(WARNING)
                 .statusDescription(
                         "Preferences not available. Underlying cause: "
+                                + "[" + Thread.currentThread().getName() + "] "
+                                + ex.getMessage()
+                )
+                .build();
+    }
+
+    default NotificationPreferencesResponse preferencesRateFallback(String customerId, Throwable ex) {
+        return NotificationPreferencesResponse.builder()
+                .status(WARNING)
+                .statusDescription(
+                        "Preferences not available. Rate limiter applied: "
                                 + "[" + Thread.currentThread().getName() + "] "
                                 + ex.getMessage()
                 )
