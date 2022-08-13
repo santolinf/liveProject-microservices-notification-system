@@ -162,6 +162,26 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Notification Health (application)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/actuator/health",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"actuator",
+						"health"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }

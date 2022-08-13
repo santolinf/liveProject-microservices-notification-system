@@ -38,6 +38,13 @@ public class NotificationService {
     private final NotificationGatewayClient notificationGatewayClient;
 
     /**
+     * <em>Note</em>: I have placed the <code>@Bulkhead</code> annotation here, primarily because the integration clients
+     * are implemented by <em>Feign</em> and Feign does not support non-blocking I/O.
+     * See {@linkplain https://github.com/OpenFeign/feign/issues/361}.
+     * <br/><br/>
+     * I have decided to use thread-pool based bulkhead and this requires <code>CompletableFuture</code>s.
+     * However, if we choose to have semaphore based bulkheads the integration clients can support it.
+     * <br/><br/>
      * With <em>SEMAPHORE</em> based Bulkheads we can only control the number of concurrent requests and wait times,
      * and requests execute using the current threads of the incoming requests.
      * <code>maxWaitDuration</code> and <code>maxConcurrentCalls</code> belong to the Semaphore-based Bulkhead.
