@@ -3,6 +3,7 @@ package com.manning.application.notification.integration;
 import com.manning.application.notification.common.model.NotificationTemplateRequest;
 import com.manning.application.notification.common.model.NotificationTemplateResponse;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import io.github.resilience4j.retry.annotation.Retry;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,6 +30,7 @@ import static com.manning.application.notification.common.model.RemoteResponseSt
 @FeignClient(name = "${com.manning.application.service.template-formatter.id}")
 @CircuitBreaker(name = "template-formatter", fallbackMethod = "templateFormatterFallback")
 @Retry(name = "template-formatter")
+@RateLimiter(name = "template-formatter", fallbackMethod = "templateFormatterRateFallback")
 public interface TemplateFormatterClient {
 
     @PostMapping("/api/notifications/templates")
@@ -41,6 +43,17 @@ public interface TemplateFormatterClient {
                         "Template service not available. Underlying cause: "
                         + "[" + Thread.currentThread().getName() + "] "
                         + ex.getMessage()
+                )
+                .build();
+    }
+
+    default NotificationTemplateResponse templateFormatterRateFallback(NotificationTemplateRequest request, Throwable ex) {
+        return NotificationTemplateResponse.builder()
+                .status(WARNING)
+                .statusDescription(
+                        "Template service not available. Rate limiter applied: "
+                                + "[" + Thread.currentThread().getName() + "] "
+                                + ex.getMessage()
                 )
                 .build();
     }
