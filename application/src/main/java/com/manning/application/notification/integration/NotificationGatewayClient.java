@@ -47,7 +47,7 @@ public interface NotificationGatewayClient {
                 .build();
     }
 
-    default NotificationGatewayResponse preferencesRateFallback(NotificationGatewayRequest request, Throwable ex) {
+    default NotificationGatewayResponse gatewayRateFallback(NotificationGatewayRequest request, Throwable ex) {
         return NotificationGatewayResponse.builder()
                 .status(WARNING)
                 .statusDescription(
