@@ -86,10 +86,25 @@ Add to the `prometheus.yml` configuration file:
 
 ```yaml
   # The job names to connect to the Notification Spring Boot-based microservices
-  - job_name: "notification-preferences"
+  - job_name: "NotificationApplication"
+    metrics_path: "/actuator/prometheus"
+    static_configs:
+      - targets: ["localhost:8080"]
+
+  - job_name: "NotificationPreferences"
     metrics_path: "/actuator/prometheus"
     static_configs:
       - targets: ["localhost:8181"]
+
+  - job_name: "NotificationTemplateFormatter"
+    metrics_path: "/actuator/prometheus"
+    static_configs:
+      - targets: ["localhost:8282"]
+
+  - job_name: "NotificationGateway"
+    metrics_path: "/actuator/prometheus"
+    static_configs:
+      - targets: ["localhost:8383"]
 ```
 
 Now, run it locally.
