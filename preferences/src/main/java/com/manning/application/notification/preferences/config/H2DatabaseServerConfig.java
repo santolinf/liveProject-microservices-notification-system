@@ -10,7 +10,7 @@ public class H2DatabaseServerConfig {
     @Bean(initMethod = "start", destroyMethod = "stop")
     public Server inMemoryH2DatabaseServer() throws Exception {
         return Server.createTcpServer(
-                "-tcp", "-tcpAllowOthers", "-tcpPort", "9090"
+                "-tcp", "-tcpAllowOthers", "-tcpPort", "9099"
         );
     }
 }

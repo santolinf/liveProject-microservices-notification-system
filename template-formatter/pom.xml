@@ -52,6 +52,12 @@
             <artifactId>spring-cloud-sleuth-zipkin</artifactId>
         </dependency>
 
+        <!-- add Prometheus actuator endpoint -->
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+        </dependency>
+
         <!-- Common Domain types -->
         <dependency>
             <groupId>com.manning.application.notification</groupId>

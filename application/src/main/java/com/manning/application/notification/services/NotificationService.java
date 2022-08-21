@@ -65,10 +65,6 @@ public class NotificationService {
         span.tag("async", "Starting an asynchronous execution after receiving Notification request");
 
         Notification notification = mapper.notificationRequestToNotification(request);
-        notification = repository.save(notification);
-
-        span.annotate("Saving Notification to Database");
-        span.finish();
 
         NotificationPreferencesResponse preferencesResponse = getPreferences(request.getCustomerId());
         if (!SUCCESS.equals(preferencesResponse.getStatus())) {
@@ -82,6 +78,10 @@ public class NotificationService {
             notificationMode = SMS;
         }
         notification.setNotificationMode(notificationMode);
+        notification = repository.save(notification);
+
+        span.annotate("Saving Notification to Database");
+        span.finish();
 
         NotificationTemplateResponse templateResponse = formatNotification(request, notificationMode);
         if (!SUCCESS.equals(templateResponse.getStatus())) {
