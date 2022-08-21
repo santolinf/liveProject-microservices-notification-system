@@ -1,2 +1,3 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.manning.application.notification.common.autoconfiguration.CommonConfig
+com.manning.application.notification.common.autoconfiguration.CommonAspectsConfig, \
+com.manning.application.notification.common.autoconfiguration.CommonExceptionHandlerConfig

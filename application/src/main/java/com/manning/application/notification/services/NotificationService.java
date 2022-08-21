@@ -1,5 +1,6 @@
 package com.manning.application.notification.services;
 
+import brave.Tracer;
 import com.manning.application.notification.common.model.*;
 import com.manning.application.notification.entities.Notification;
 import com.manning.application.notification.formatters.NotificationMapper;
@@ -11,6 +12,7 @@ import com.manning.application.notification.model.NotificationResponse;
 import com.manning.application.notification.repositories.NotificationRepository;
 import io.github.resilience4j.bulkhead.annotation.Bulkhead;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -37,6 +39,8 @@ public class NotificationService {
 
     private final NotificationGatewayClient notificationGatewayClient;
 
+    private final Tracer tracer;
+
     /**
      * <em>Note</em>: I have placed the <code>@Bulkhead</code> annotation here, primarily because the integration clients
      * are implemented by <em>Feign</em> and Feign does not support non-blocking I/O.
@@ -53,11 +57,18 @@ public class NotificationService {
      * <code>maxThreadPoolSize</code>, <code>coreThreadPoolSize</code> and <code>queueCapacity</code> belong to the
      * Threadpool-based Bulkhead.
      */
+    @Async
     @Bulkhead(name = "sendNotification", type = THREADPOOL, fallbackMethod = "concurrentSendNotificationFallback")
     @Transactional
     public CompletableFuture<NotificationResponse> sendNotification(NotificationRequest request) {
+        var span = tracer.startScopedSpan("Accept Notification Request");
+        span.tag("async", "Starting an asynchronous execution after receiving Notification request");
+
         Notification notification = mapper.notificationRequestToNotification(request);
         notification = repository.save(notification);
+
+        span.annotate("Saving Notification to Database");
+        span.finish();
 
         NotificationPreferencesResponse preferencesResponse = getPreferences(request.getCustomerId());
         if (!SUCCESS.equals(preferencesResponse.getStatus())) {

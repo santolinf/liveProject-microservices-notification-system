@@ -8,5 +8,5 @@ import org.springframework.context.annotation.ComponentScan;
 @AutoConfiguration
 @ConditionalOnMissingBean({ NotificationControllersAdvice.class })
 @ComponentScan("com.manning.application.notification.common.exceptions")
-public class CommonConfig {
+public class CommonExceptionHandlerConfig {
 }
