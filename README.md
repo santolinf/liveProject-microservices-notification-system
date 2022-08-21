@@ -76,3 +76,30 @@ Open the UI at http://localhost:16686
 ![](results/jaeger-tracing-request-summary.png)
 
 ![](results/jaeger-tracing-request-detailed.png)
+
+## Monitoring
+
+### Prometheus
+Download executable for your platform [Prometheus](https://prometheus.io/download/).
+
+Add to the `prometheus.yml` configuration file:
+
+```yaml
+  # The job names to connect to the Notification Spring Boot-based microservices
+  - job_name: "notification-preferences"
+    metrics_path: "/actuator/prometheus"
+    static_configs:
+      - targets: ["localhost:8181"]
+```
+
+Now, run it locally.
+
+```shell
+prometheus --storage.tsdb.path=./data --config.file=./prometheus.yml
+```
+
+Open the UI at http://localhost:9090
+
+![](results/prometheus-targets.png)
+
+![](results/prometheus-circuit-breaker-query.png)
