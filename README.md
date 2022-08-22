@@ -80,7 +80,7 @@ Open the UI at http://localhost:16686
 ## Monitoring
 
 ### Prometheus
-Download executable for your platform [Prometheus](https://prometheus.io/download/).
+Download the executable for your platform [Prometheus](https://prometheus.io/download/).
 
 Add to the `prometheus.yml` configuration file:
 
@@ -118,3 +118,20 @@ Open the UI at http://localhost:9090
 ![](results/prometheus-targets.png)
 
 ![](results/prometheus-circuit-breaker-query.png)
+
+### Grafana
+
+Download the executable for your platform [Grafana](https://grafana.com/docs/grafana/latest/).
+
+Start Grafana and on the Grafana Console http://localhost:3000 :
+
+* Add a Data Source pointing to our local Prometheus instance (http://localhost:9090)
+
+![](results/grafana-data-source.png)
+
+* Import a Dashboard definition from https://grafana.com/grafana/dashboards/11378/
+
+![](results/grafana-load-dashboard.png)
+
+When services are running then we can view their metrics via the imported dashboard:
+![](results/grafana-services-metrics.png)
